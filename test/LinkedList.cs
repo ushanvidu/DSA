@@ -261,22 +261,27 @@ namespace test
         public void printList()
         {
             Node current = Head;
-            for (int i = 1; i < Count; i++)
+            int i = 1;
+
+            if (current == null)
+            {
+                Console.WriteLine("The list is empty.");
+                return;
+            }
+
+            while (current != null) 
             {
                 if (current.Quantity == null || current.Price == null)
                 {
-                    
                     Console.WriteLine(current.Data);
                 }
                 else
                 {
-                   
-                        Console.WriteLine(
-                            $"Item-{i}: {current.Data}, Quantity: {current.Quantity}, Price: {current.Price}");
-                    
+                    Console.WriteLine($"Item-{i}: {current.Data}, Quantity: {current.Quantity}, Price: {current.Price}");
                 }
 
                 current = current.Next;
+                i++;
             }
         }
         

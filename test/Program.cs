@@ -131,26 +131,26 @@ namespace test
             };
             
             //merge sort
-            Stopwatch timer = new Stopwatch();
-            timer.Start();
-            MergeSortLinkedList sorter = new MergeSortLinkedList();
-            itemlist[categoryIndex - 1].Head = sorter.Sort(itemlist[categoryIndex - 1].Head, sortBy);
-            timer.Stop();
-            
-            Console.WriteLine("\nSorted Items:");
-            itemlist[categoryIndex - 1].printList();
-            Console.WriteLine($"\nMerge Sort - Sorting completed in {timer.ElapsedMilliseconds} ms ({timer.ElapsedTicks} ticks).");
-            
-            //insertion sort
-             //  Stopwatch timer1 = new Stopwatch();
-             //  timer1.Start();
-             //  InsertionSort sort1 = new InsertionSort();
-             // itemlist[categoryIndex - 1]=sort1.InsersionSort(itemlist[categoryIndex - 1], sortBy,true);
-             //  Console.WriteLine("\nSorted Items:");
-             //  itemlist[categoryIndex - 1].printList();
-             //  timer1.Stop();
-             //  Console.WriteLine($"\n Insertion Sort - Sorting completed in {timer1.ElapsedMilliseconds} ms ({timer1.ElapsedTicks} ticks).");
-             // //  
+            // Stopwatch timer = new Stopwatch();
+            // timer.Start();
+            // MergeSortLinkedList sorter = new MergeSortLinkedList();
+            // itemlist[categoryIndex - 1].Head = sorter.Sort(itemlist[categoryIndex - 1].Head, sortBy);
+            // timer.Stop();
+            //
+            // Console.WriteLine("\nSorted Items:");
+            // itemlist[categoryIndex - 1].printList();
+            // Console.WriteLine($"\nMerge Sort - Sorting completed in {timer.ElapsedMilliseconds} ms ({timer.ElapsedTicks} ticks).");
+            //
+            // insertion sort
+               Stopwatch timer1 = new Stopwatch();
+               timer1.Start();
+               InsertionSort sort1 = new InsertionSort();
+              itemlist[categoryIndex - 1]=sort1.InsersionSort(itemlist[categoryIndex - 1], sortBy,true);
+               Console.WriteLine("\nSorted Items:");
+               itemlist[categoryIndex - 1].printList();
+               timer1.Stop();
+               Console.WriteLine($"\n Insertion Sort - Sorting completed in {timer1.ElapsedMilliseconds} ms ({timer1.ElapsedTicks} ticks).");
+              //  
               //Quick sort
               // Stopwatch timer2 = new Stopwatch();
               // timer2.Start();
@@ -174,7 +174,13 @@ namespace test
             }
 
             Console.Write("Enter the item name: ");
-            string itemName = Console.ReadLine();
+            string itemName = Console.ReadLine()?.Trim();
+    
+            if (string.IsNullOrWhiteSpace(itemName))
+            {
+                Console.WriteLine("Item name cannot be empty.");
+                return;
+            }
 
             Console.Write("Enter the quantity: ");
             if (!int.TryParse(Console.ReadLine(), out int quantity) || quantity <= 0)
@@ -190,10 +196,15 @@ namespace test
                 return;
             }
 
+            // Add the item to the selected category
             itemlist[categoryIndex - 1].AddLast(itemName, quantity, price);
-            Console.WriteLine($"\nItem '{itemName}' added successfully.");
-        }
+    
+            Console.WriteLine($"\nItem '{itemName}' added successfully!");
 
+            // Display updated items in the category
+            Console.WriteLine("\nUpdated Item List:");
+            itemlist[categoryIndex - 1].printList();
+        }
         static void RemoveItem(LinkedList category, System.Collections.Generic.List<LinkedList> itemlist)
         {
             ViewCategories(category);

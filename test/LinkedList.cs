@@ -1,180 +1,323 @@
-namespace test;
+using System;
 
-   
-public class Node
+namespace test
 {
-    public string Data { get; set; }
-    public Node? Next { get; set; } //refference variable , it store address in the node clz
-    public Node? Previous { get; set; }
-    public Node(string data)
+    public class Node
+
     {
-        Data = data;
-        Next = null;
-        Previous = null;
+        public string Data { get; set; }
+        public int? Quantity { get; set; }
+        public double? Price { get; set; }
+        public Node? Next { get; set; }
+        public Node? Previous { get; set; }
+
+        public Node(string data)
+        {
+            Data = data;
+            Next = null;
+            Previous = null;
+            Quantity = null;  
+        }
+        public Node(string data, int? quantity = null, double? price = null)
+        {
+            Data = data;
+            Quantity = quantity;
+            Price = price;
+            Next = null;
+            Previous = null;
+        }
+
+       
     }
 
-    
-}
-
-
-public class LinkedList
-{
-   
-
-    public Node? Head { get; set; }
-    public Node? Tail { get; set; }
-    public int count { get; set; }
-
-    public LinkedList()
+    public class LinkedList
     {
-        Head = null;    
-        Tail = null;
-        count = 0;
-    }
+        public Node? Head { get; set; }
+        public Node? Tail { get; set; }
+        public int Count { get; set; }
 
-    public void AddFront(string val)
-    {
-        Node temp=new Node(val);
-        if (Head == null)   //check list is empty
+        public LinkedList()
         {
-            Head = temp;
-            Tail = temp;
-            count++;
-        }
-        else
-        {
-            temp.Next = Head;
-            Head = temp;
-            count++;
-        }
-    }
-
-    public void printList()
-    {
-        Node Current = Head;
-        while (Current != null)
-        {
-            Console.WriteLine(Current.Data);
-            Current = Current.Next;
-        }
-    }
-
-    public void AddLast(string val)
-    {
-        Node temp = new Node(val);
-        if (Tail == null)
-        {
-            Tail = temp;
-           Head = temp;
-            count++;
-        }
-        else
-        {
-            Tail.Next = temp;
-            Tail = temp;
-            count++;
-        }
-    }
-
-    public void AddAt(string val, int index)
-    {
-        Node temp = new Node(val);
-        if (index < 0 || index >= count)
-        {
-            Console.WriteLine("Invalid Index");
+            Head = null;
+            Tail = null;
+            Count = 0;
         }
 
-        if (index == 0)
-        {
-            AddFront(val);
-            return;
-        }
-
-        if (index == count )
-        {
-            AddLast(val);
-            return;
-        }
-        else
-        {
-            Node current = Head;
-            
-            for (int i = 0; i < index-1 ; i++)
-            {
-                current = current.Next;
-            }
-            temp.Next = current.Next;
-            current.Next = temp;
-            count++;
-        }
-    }
-
-    public void RemoveAt(int index)
-    {
         
-        if (index < 0 || index >= count)
+        public void AddFront(string val)
         {
-            Console.WriteLine("Invalid Index");
-            return;
+            Node temp = new Node(val);
+            if (Head == null)
+            {
+                Head = Tail = temp;
+            }
+            else
+            {
+                temp.Next = Head;
+                Head.Previous = temp;
+                Head = temp;
+            }
+            Count++;
         }
 
-        if (index == 0)
+
+        public void AddFront(string val, int quantity, double price)
         {
-          Head= Head.Next;
+            Node temp = new Node(val, quantity, price);
+            if (Head == null)
+            {
+                Head = Tail = temp;
+            }
+            else
+            {
+                temp.Next = Head;
+                Head.Previous = temp;
+                Head = temp;
+            }
+            Count++;
         }
 
-        if (Head == null)
+        
+        public void AddLast(string val)
         {
-            Tail= null;
-            count--;
-            
+            Node temp = new Node(val);
+            if (Tail == null)
+            {
+                Head = Tail = temp;
+            }
+            else
+            {
+                Tail.Next = temp;
+                Tail = temp;
+            }
+            Count++;
         }
-        else
+
+
+        public void AddLast(string val, int quantity, double price)
         {
+            Node temp = new Node(val, quantity, price);
+            if (Tail == null)
+            {
+                Head = Tail = temp;
+            }
+            else
+            {
+                Tail.Next = temp;
+                Tail = temp;
+            }
+            Count++;
+        }
+
+       
+        public void AddAt(string val, int index)
+        {
+            if (index < 0 || index > Count)
+            {
+                Console.WriteLine("Invalid Index");
+                return;
+            }
+
+            if (index == 0)
+            {
+                AddFront(val);
+                return;
+            }
+
+            if (index == Count)
+            {
+                AddLast(val);
+                return;
+            }
+
+            Node temp = new Node(val);
             Node current = Head;
+
             for (int i = 0; i < index - 1; i++)
             {
                 current = current.Next;
             }
-            current.Next = current.Next.Next;
-            if (index == count - 1)
+
+            temp.Next = current.Next;
+            if (current.Next != null)
             {
-                Tail= current;
+                current.Next.Previous = temp;
+            }
+            current.Next = temp;
+            temp.Previous = current;
+            Count++;
+        }
+
+
+        public void AddAt(string val, int quantity, double price, int index)
+        {
+            if (index < 0 || index > Count)
+            {
+                Console.WriteLine("Invalid Index");
+                return;
             }
 
-            count--;
-        }
-    }
-
-    public Node Search(string val)
-    {
-        Node current = Head;
-        while (current != null)
-        {
-            if (current.Data == val)
+            if (index == 0)
             {
-                Node node= new Node(current.Data);
-                
-                return node ;
+                AddFront(val, quantity, price);
+                return;
             }
-            current = current.Next;
-        
+
+            if (index == Count)
+            {
+                AddLast(val, quantity, price);
+                return;
+            }
+
+            Node temp = new Node(val, quantity, price);
+            Node current = Head;
+
+            for (int i = 0; i < index - 1; i++)
+            {
+                current = current.Next;
+            }
+
+            temp.Next = current.Next;
+            if (current.Next != null)
+            {
+                current.Next.Previous = temp;
+            }
+            current.Next = temp;
+            temp.Previous = current;
+            Count++;
         }
         
-        return null;
-    }
-    public int GetIndex(string val)
-    {
-        Node? current = Head;
-        int index = 0;
-        while (current != null)
+        
+        
+        //meka quntity eken adu wenna hdnna one . quentity eka iwara unama item eka ain wenna.
+
+        public void RemoveAt(int index)
         {
-            if (current.Data == val)
-                return index;
-            current = current.Next;
-            index++;
+            if (index < 0 || index >= Count)
+            {
+                Console.WriteLine("Invalid Index");
+                return;
+            }
+
+            if (index == 0)
+            {
+                Head = Head.Next;
+                if (Head != null)
+                    Head.Previous = null;
+                else
+                    Tail = null;
+                Count--;
+                return;
+            }
+
+            Node current = Head;
+            for (int i = 0; i < index; i++)
+            {
+                current = current.Next;
+            }
+
+            if (current.Previous != null)
+                current.Previous.Next = current.Next;
+            if (current.Next != null)
+                current.Next.Previous = current.Previous;
+
+            if (index == Count - 1)
+                Tail = current.Previous;
+
+            Count--;
         }
-        return -1; 
+
+        public Node? Search(string val)
+        {
+            Node current = Head;
+            while (current != null)
+            {
+                if (current.Data == val)
+                {
+                    return current;
+                }
+
+                current = current.Next;
+            }
+
+            return null;
+        }
+
+        public int GetIndex(string val)
+        {
+            Node current = Head;
+            int index = 0;
+            while (current != null)
+            {
+                if (current.Data == val)
+                    return index;
+                current = current.Next;
+                index++;
+            }
+
+            return -1;
+        }
+
+        public void printList()
+        {
+            Node current = Head;
+            for (int i = 1; i < Count; i++)
+            {
+                if (current.Quantity == null || current.Price == null)
+                {
+                    
+                    Console.WriteLine(current.Data);
+                }
+                else
+                {
+                   
+                        Console.WriteLine(
+                            $"Item-{i}: {current.Data}, Quantity: {current.Quantity}, Price: {current.Price}");
+                    
+                }
+
+                current = current.Next;
+            }
+        }
+        
+        public Node[] ToArray()
+        {
+            int count = GetCount();
+            Node[] array = new Node[count];
+
+            Node current = Head;
+            int index = 0;
+            while (current != null)
+            {
+                array[index++] = current;
+                current = current.Next;
+            }
+            return array;
+        }
+
+        private int GetCount()
+        {
+            int count = 0;
+            Node current = Head;
+            while (current != null)
+            {
+                count++;
+                current = current.Next;
+            }
+            return count;
+        }
+
+        public void ReduceQuantity(int index, int quantity)
+        {
+            Node current = Head;
+            for (int i = 0; i < index; i++)
+            {
+                current = current.Next;
+            }
+            current.Quantity -= quantity;
+            
+        }
     }
 }
 
+    
